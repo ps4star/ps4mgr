@@ -2,12 +2,7 @@ const readline = require('readline')
 
 // snd script
 const args = process.argv.slice(2)
-
-if (args.length == 0) {
-    startInteractive()
-} else {
-    determineAndRunOp(args)
-}
+determineAndRunOp(args)
 
 function determineAndRunOp(args) {
     // determine operation and run it
@@ -17,6 +12,9 @@ function determineAndRunOp(args) {
     } else if (args[0] == "l" || args[0] == "list") {
         // list operation
         startList()
+    } else if (args[0] == "" || args.length == 0) {
+        // interactive mode
+        startInteractive()
     }
 }
 
@@ -30,8 +28,9 @@ async function startInteractive() {
             resolve()
         })
     })
-
     rl.close()
+
+    determineAndRunOp(choice.split(" "))
 }
 
 function startExtract(args) {
