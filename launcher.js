@@ -1,7 +1,7 @@
 // imports
 const readline = require("readline")
 const fs = require("fs")
-const { exec } = require("child_process")
+const { spawnSync } = require("child_process")
 
 // const
 const PS4DISASM_REPO = "https://github.com/lory90/ps4disasm"
@@ -14,8 +14,6 @@ const exitWith = (msg) => { log(msg) && process.exit(1) }
 
 // load ps4disasm
 clr()
-log("Welcome to ps4mgr. Setting a few things up...")
-log("Checking for ps4disasm dir...")
 
 if (!fs.existsSync("ps4disasm")) {
     log("WARN did not find ps4disasm, starting git clone. This may take a few minutes...")
@@ -42,7 +40,10 @@ async function mainLoop(rl) {
             res = res.substring(0, 1);
             if (res >= '1' && res <= SCRIPT_TABLE.length.toString()) {
                 clr()
-                exec( `node ${process.cwd()}/scripts/${SCRIPT_TABLE[parseInt(res) - 1]}.js`, resolve )
+                spawnSync(`node`, [`${ process.cwd() }/${ SCRIPT_TABLE[parseInt(res) - 1] }.js`], {
+                    stdio: ['inherit', 'inherit', 'inherit'],
+                })
+                process.exit(0)
             } else {
                 log(`Illegal option: ${res}`)
                 resolve()
