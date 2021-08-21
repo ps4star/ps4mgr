@@ -28,8 +28,7 @@ async function mainLoop(rl) {
     clr()
     log("============ PS4MGR ============")
     log("1. ps4snd - modify sound data")
-    log("2. ps4img - modify images")
-    log("3. ps4scr - modify story scripts")
+    log("(COMING SOON TM) 2. ps4img - modify images")
 
     // prompt
     await new Promise(resolve => {
