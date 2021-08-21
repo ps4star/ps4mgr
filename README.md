@@ -10,9 +10,9 @@ NodeJS - go to https://nodejs.org to install Node if you don't have it already. 
 
 # Usage
 
-ps4disasm must be in the same directory as all the files contained in this repo. If you don't have it already, make sure git is installed on your system, then run:
-
 ```node launcher.js```
+
+This script will first attempt to execute a "git clone" to download the ps4disasm files. If you don't have git installed or don't want to download the files this way, make sure a directory with the name "ps4disasm" is in the same directory as launcher.js and all other files in this repo, and that the directory is populated with all the proper ps4disasm files in all the right places.
 
 Once downloaded, the launcher script will then prompt you to run a script such as ps4snd. Enter the number of the script you want to use, and you'll enter an interactive shell where you can launch sub-operations defined for that script (e.g. ```ps4snd> l``` to list all songs found in the game data).
 
@@ -33,3 +33,5 @@ Remember that you can also use ps4snd from the interactive shell if you access i
 ## ps4img
 
 Still WIP, does nothing at the moment.
+
+## MORE SCRIPTS COMING SOON!
