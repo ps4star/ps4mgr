@@ -19,7 +19,9 @@ You can also launch scripts individually, e.g. ```node ps4snd.js``` to launch ps
 ## ps4snd
 
 ```node ps4snd.js l``` - list out all music names
+
 ```node ps4snd.js x -f txt MotabiaTown``` - extract music data for the Motavia Town theme as txt format into the file "MotabiaTown.txt"
+
 ```node ps4snd.js r -f txt MotabiaTown.txt``` - converts MotabiaTown.txt text data into raw asm bytes and inserts them into the ps4.sound_driver.asm file (location is specified in some variables within the .txt file itself, in the ".section META" section).
 
 Remember that you can also use ps4snd from the interactive shell if you access it from launcher.js. It works exactly the same, except you omit the "node ps4snd.js" part, e.g.:
