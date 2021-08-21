@@ -1,2 +1,4 @@
 .gittoken
 ps4disasm/**/*
+./build.sh
+./*.txt
