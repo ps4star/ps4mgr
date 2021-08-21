@@ -6,7 +6,7 @@ CLI manager for Phantasy Star IV files. Does not modify ROMs directly, instead e
 
 NodeJS is the only dependency. Go to https://nodejs.org to install Node if you don't have it already. The ```node``` command must be in your path.
 
-You can optionally install git to auto-download ps4disasm into the required location (same directory as launcher.js).
+You can optionally install git to auto-download ps4disasm.
 
 # Usage
 
