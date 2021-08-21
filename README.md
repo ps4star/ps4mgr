@@ -9,5 +9,3 @@ NodeJS is the only dependency. Go to https://nodejs.org to install Node if you d
 # Usage
 
 ```node launcher.js``` to get started. You can also launch scripts individually, e.g. ```node ps4snd.js``` to launch ps4snd.
-
-For individual script help, type "h" at an interactive prompt.
