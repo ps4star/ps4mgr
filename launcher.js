@@ -7,7 +7,7 @@ const readline = require('readline')
 
 // const
 const PS4DISASM_REPO = "https://github.com/lory90/ps4disasm"
-const SCRIPT_TABLE = [ "ps4snd", "ps4img", "ps4scr" ]
+const SCRIPT_TABLE = [ "ps4snd", "ps4img" ]
 
 // load ps4disasm
 clr()
