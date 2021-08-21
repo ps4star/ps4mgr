@@ -94,6 +94,7 @@ function getChannels(headlessSndBlock) {
 }
 
 function channelTextToBytes(channelText) {
+    // converts text of entire channel data to a raw byte buffer
     const channelTextLines = channelText.split("\n")
     return [ channelTextLines[0], new Uint8Array( channelTextLines.slice(1).join("\n").replace(/dc.b/g, "").replace(/\;.+/g, "").replace(/, /g, "")
         .replace(/\$/g, " ").replace(/\n/g, "").replace(/\t/g, "").replace(/ +/g, " ").split(" ").filter(el => !!el).map(el => parseInt(el, 16)) ) ]
