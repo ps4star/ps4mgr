@@ -531,7 +531,7 @@ function startReplace(args) {
     const finishedFile = spliceSection(sndAsm, blockBeginTag, blockEndTag, finishedResult)
     require('fs').writeFileSync("ps4disasm/sound/ps4.sound_driver.asm", finishedFile)
 
-    log("WROTE FILE TO ps4.sound_driver.asm! But I can't guarantee it'll sound the way you expect...")
+    log("WROTE FILE TO ps4.sound_driver.asm!")
 }
 
 init(process.argv.slice(2), {
