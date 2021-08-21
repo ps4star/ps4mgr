@@ -1,4 +1,4 @@
 .gittoken
 ps4disasm/**/*
-./build.sh
-./*.txt
+build.sh
+MotabiaTown.txt
