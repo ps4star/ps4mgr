@@ -6,6 +6,8 @@ const readline   = require('readline')
 const DISASM_PATH_PREFIX = "./ps4disasm"
 
 // some basic bitch utils
+const toHex = (n) => n.toString(16).padStart(2, "0").toUpperCase()
+
 const log        = (msg) => console.log(msg)
 const clr        = () => console.clear()
 const exitWith   = (msg) => { log(msg) && process.exit(1) }
@@ -23,6 +25,10 @@ function convertSigned(n) {
     } else {
         return n
     }
+}
+
+function getBit(n, num) {
+    return (num >> n) & 1
 }
 
 // basic initial script setup
@@ -123,6 +129,6 @@ class LineStepper {
     }
 }
 
-module.exports = { log, clr, exitWith, readFileNoPrefix, readFile, writeFile,
+module.exports = { toHex, log, clr, exitWith, readFileNoPrefix, readFile, writeFile,
     isValidFile, init, spawnSync, getSection, spliceSection, getByteArrayFromDbLine,
-    convertSigned, LineStepper }
+    convertSigned, getBit, LineStepper }

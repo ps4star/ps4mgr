@@ -1,4 +1,5 @@
 const {
+    toHex,
     log,
     clr,
     exitWith,
@@ -177,6 +178,8 @@ function getNumBytes(ln) {
     if (!ln || ln.charAt(0) == "." || /^.+\=.+$/.test(ln)) return 0
     if (op === T_NOTE || op === T_DURATION) {
         return 1
+    } else if (op === T_LOOP_F7) {
+        return 5
     } else if (op === T_GOSUB_F8 || op === T_GOTO_F6) {
         return 3
     } else if (op === T_HOLD_E7) {
@@ -225,6 +228,7 @@ function startExtract(args) {
     const dt = []
     let numPLbls = 0
     let numNLbls = 0
+    let numLoops = 0
     if (format == "asm") {
         // simply output sndBlock and return
         out(fname, sndBlock)
@@ -357,7 +361,19 @@ CREATION_METHOD=extracted
                     put(`${T_GOTO_F6} ${lblName}`)
                 } else if (byte == 0xF7) {
                     // loop
-                    put(`${T_LOOP_F7} ${next()} ${next()} ${next()} ${next()}`)
+                    const loopNum1 = next(), loopNum2 = next()
+                    const n1 = nextByte(), n2 = nextByte()
+                    const actualNum = convertSigned(n1 * 256 + n2)
+
+                    const lblName = `loop${++numLoops}`
+
+                    if (actualNum >= 0) {
+                        timers.push([ lblName, i + actualNum ])
+                    } else {
+                        doPushback(actualNum, outBuf, lblName)
+                    }
+
+                    put(`${T_LOOP_F7} ${loopNum1} ${loopNum2} ${lblName}`)
                 } else if (byte == 0xF8) {
                     // gosub
                     const n1 = nextByte(), n2 = nextByte()
@@ -465,9 +481,17 @@ function startReplace(args) {
             const thisByteArray = []
             ALL_TOKENS.forEach((token, i) => {
                 if (thisLn.split(" ")[0] == token) {
-                    if (i == ALL_TOKENS.indexOf(T_GOSUB_F8) || i == ALL_TOKENS.indexOf(T_GOTO_F6)) {
-                        // goto/gosub pre-process
-                        const lblName = thisLn.split(" ")[1]
+                    if (i == ALL_TOKENS.indexOf(T_GOSUB_F8) || i == ALL_TOKENS.indexOf(T_GOTO_F6) || i == ALL_TOKENS.indexOf(T_LOOP_F7)) {
+                        // goto / gosub / loop pre-process
+                        let lblName,
+                            isLoop = false
+
+                        if (!(i == ALL_TOKENS.indexOf(T_LOOP_F7))) {
+                            lblName = thisLn.split(" ")[1]
+                        } else {
+                            lblName = thisLn.split(" ")[3]
+                            isLoop = true
+                        }
 
                         // go through entire file to search for 
                         const txtLines = txtFile.split("\n")
@@ -483,7 +507,11 @@ function startReplace(args) {
                                 hexValue = hexValue.toString(16).toUpperCase().padStart(4, "0")
 
                                 const thisLnParts = thisLn.split(" ")
-                                thisLn = thisLnParts[0] + " " + hexValue.substring(0, 2) + " " + hexValue.substring(2, 4)
+                                if (!isLoop) {
+                                    thisLn = thisLnParts[0] + " " + hexValue.substring(0, 2) + " " + hexValue.substring(2, 4)
+                                } else {
+                                    thisLn = `${thisLnParts[0]} ${thisLnParts[1]} ${thisLnParts[2]} ${hexValue.substring(0, 2)} ${hexValue.substring(2, 4)}`
+                                }
                             }
                         })
                         t++
