@@ -412,7 +412,10 @@ CREATION_METHOD=extracted
                 } else if (byte <= 0xDF && byte >= 0x81) {
                     // true and honest note
                     put(`${T_NOTE} ${byteToNote(byte)}`)
-                } else if (byte < 0x81) {
+                } else if (byte == 0x80) {
+                    // rest
+                    put(`r`)
+                } else if (byte < 0x80) {
                     // durset
                     put(`${T_DURATION} ${byte.toString()}`)
                 } else {
@@ -446,7 +449,10 @@ function startReplace(args) {
 
     // format isn't relevant here because you aren't going to be using asm blocks for this anyway
     // only txt is accepted for now
-    const txtFile = readFileNoPrefix(fileName)
+    
+    // for some reason, introducing a T_REST ("r") token just broke relative jump labels
+    // so instead we'll make it an alias of "n d-1"
+    const txtFile = readFileNoPrefix(fileName).replace(/\n\tr\n/g, "\n\tn d-1\n")
     const stepper = new LineStepper(txtFile)
 
     stepper.stepUntil(".section META")
@@ -469,7 +475,7 @@ function startReplace(args) {
     let t = 0, t2 = 0
 
     while (!stepper.isEOF()) {
-        let thisLn = stepper.step().replace(/ +/g, " ").replace(/\t+/g, "\t").replace(/;.+$/g, "").trimStart()
+        let thisLn = stepper.step().replace(/ +/g, " ").replace(/\t+/g, "\t").trimStart()
         if (!thisLn) continue
         if (/^.+:$/.test(thisLn)) {
             // is lbl
@@ -533,6 +539,9 @@ function startReplace(args) {
                         thisByteArray.push(parseInt(thisLn.split(" ")[1]))
 
                         byteLenSoFar += 1
+                    } else if (i == 35) {
+                        // rest
+                        thisByteArray.push(0x80)
                     }
                 }
             })
